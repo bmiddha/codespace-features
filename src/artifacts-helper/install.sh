@@ -11,6 +11,7 @@ ALIAS_YARN="${YARNALIAS:-"true"}"
 ALIAS_NPX="${NPXALIAS:-"true"}"
 ALIAS_RUSH="${RUSHALIAS:-"true"}"
 ALIAS_PNPM="${PNPMALIAS:-"true"}"
+ALIAS_CARGO="${CARGOALIAS:-"true"}"
 INSTALL_PIP_HELPER="${PYTHON:-"false"}"
 COMMA_SEP_TARGET_FILES="${TARGETFILES:-"DEFAULT"}"
 
@@ -38,6 +39,9 @@ fi
 if [ "${ALIAS_PNPM}" = "true" ]; then
     ALIASES_ARR+=('pnpm')
     ALIASES_ARR+=('pnpx')
+fi
+if [ "${ALIAS_CARGO}" = "true" ]; then
+    ALIASES_ARR+=('cargo')
 fi
 
 # Source /etc/os-release to get OS info
@@ -103,6 +107,9 @@ cp ./scripts/run-pnpm.sh /usr/local/bin/run-pnpm.sh
 chmod +rx /usr/local/bin/run-pnpm.sh
 cp ./scripts/run-pnpx.sh /usr/local/bin/run-pnpx.sh
 chmod +rx /usr/local/bin/run-pnpx.sh
+
+cp ./scripts/run-cargo.sh /usr/local/bin/run-cargo.sh
+chmod +rx /usr/local/bin/run-cargo.sh
 
 if [ "${INSTALL_PIP_HELPER}" = "true" ]; then
     USER="${_REMOTE_USER}" /tmp/install-python-keyring.sh
