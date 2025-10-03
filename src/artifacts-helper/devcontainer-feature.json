@@ -49,6 +49,11 @@
             "default": true,
             "description": "Create alias for pnpm"
         },
+        "cargoAlias": {
+            "type": "boolean",
+            "default": true,
+            "description": "Create alias for cargo"
+        },
         "targetFiles": {
             "type": "string",
             "default": "DEFAULT",

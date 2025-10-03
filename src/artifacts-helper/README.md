@@ -24,6 +24,7 @@ Configures Codespace to authenticate with Azure Artifact feeds
 | npxAlias | Create alias for npx | boolean | true |
 | rushAlias | Create alias for rush | boolean | true |
 | pnpmAlias | Create alias for pnpm | boolean | true |
+| cargoAlias | Create alias for cargo | boolean | true |
 | targetFiles | Comma separated list of files to write to. Default is '/etc/bash.bashrc,/etc/zsh/zshrc' for root and '~/.bashrc,~/.zshrc' for non-root | string | DEFAULT |
 | python | Install Python keyring helper for pip | boolean | false |
 
@@ -34,7 +35,7 @@ Configures Codespace to authenticate with Azure Artifact feeds
 - `ms-codespaces-tools.ado-codespaces-auth`
 
 This installs [Azure Artifacts Credential Provider](https://github.com/microsoft/artifacts-credprovider)
-and optionally configures functions which shadow `dotnet`, `nuget`, `npm`, `yarn`, `rush`, and `pnpm` which dynamically sets an authentication token
+and optionally configures functions which shadow `dotnet`, `nuget`, `npm`, `yarn`, `rush`, `pnpm`, and `cargo` which dynamically sets an authentication token
 for pulling artifacts from a feed before running the command.
 
 For `npm`, `yarn`, `rush`, and `pnpm` this requires that your `~/.npmrc` file is configured to use the ${ARTIFACTS_ACCESSTOKEN}
@@ -58,6 +59,25 @@ are put in place if they are not provided. An example of the `.npmrc` file creat
 //pkgs.dev.azure.com/orgname/projectname/_packaging/feed1/npm/:username=codespaces
 //pkgs.dev.azure.com/orgname/projectname/_packaging/feed1/npm/:_authToken=${ARTIFACTS_ACCESSTOKEN}
 //pkgs.dev.azure.com/orgname/projectname/_packaging/feed1/npm/:email=codespaces@github.com
+```
+
+## Cargo (Rust) Support
+
+For `cargo`, the authentication token is automatically set via the `CARGO_REGISTRIES_AZUREARTIFACTS_TOKEN` environment variable when using the cargo alias. To use this with Azure Artifacts, you need to configure your `~/.cargo/config.toml` file with the registry:
+
+```toml
+[registries.azureartifacts]
+index = "sparse+https://pkgs.dev.azure.com/orgname/projectname/_packaging/feed/Cargo/index/"
+
+[net]
+git-fetch-with-cli = true
+```
+
+Then you can reference dependencies in your `Cargo.toml`:
+
+```toml
+[dependencies]
+my-package = { version = "1.0", registry = "azureartifacts" }
 ```
 
 ## Python Keyring Helper
